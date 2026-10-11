@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Oh nein, was kann es nur sein</title>
+  <meta property="og:title" content="Oh nein, was kann es nur sein">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#ffd9de">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌺%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: #5a2a3a;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background: linear-gradient(160deg, #ffd3dc 0%, #ffdcd6 45%, #ffe2c8 100%);
+      background-attachment: fixed;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+    }
+
+    /* ---------- Blood lilies ---------- */
+    .lilies {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .lily {
+      --L: clamp(170px, 50vmin, 340px);
+      position: absolute;
+      width: var(--L);
+      height: var(--L);
+      will-change: transform;
+      animation: sway 6s ease-in-out infinite;
+    }
+
+    .lily::before {
+      content: "";
+      position: absolute;
+      inset: 36%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, #e0283a, #9e0d22);
+    }
+
+    .lily.tl { top: calc(var(--L) * -0.32); left: calc(var(--L) * -0.32); animation-duration: 5.4s; animation-delay: -1s; }
+    .lily.tr { top: calc(var(--L) * -0.32); right: calc(var(--L) * -0.32); animation-duration: 6.3s; animation-delay: -3s; animation-direction: reverse; }
+    .lily.bl { bottom: calc(var(--L) * -0.32); left: calc(var(--L) * -0.32); animation-duration: 5.9s; animation-delay: -2s; animation-direction: reverse; }
+    .lily.br { bottom: calc(var(--L) * -0.32); right: calc(var(--L) * -0.32); animation-duration: 6.8s; animation-delay: -4s; }
+
+    .floret {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: max(1px, calc(var(--L) * 0.006));
+      background: var(--c);
+      border-radius: 2px;
+      transform-origin: 0 50%;
+      transform: rotate(var(--a));
+    }
+
+    .floret::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: calc(var(--L) * 0.055);
+      height: calc(var(--L) * 0.055);
+      background: var(--c);
+      transform: translate(50%, -50%);
+      clip-path: polygon(50% 0, 61% 31%, 93.3% 25%, 72% 50%, 93.3% 75%, 61% 69%, 50% 100%, 39% 69%, 6.7% 75%, 28% 50%, 6.7% 25%, 39% 31%);
+    }
+
+    .floret::after {
+      content: "";
+      position: absolute;
+      right: calc(var(--L) * -0.04);
+      top: 50%;
+      width: calc(var(--L) * 0.014);
+      height: calc(var(--L) * 0.014);
+      border-radius: 50%;
+      background: #ffd23f;
+      transform: translateY(-50%);
+      box-shadow:
+        calc(var(--L) * -0.008) calc(var(--L) * -0.018) 0 #ffcc33,
+        calc(var(--L) * -0.008) calc(var(--L) * 0.018) 0 #ffe066;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-6deg) translate(0, 0); }
+      50%      { transform: rotate(6deg) translate(2%, -2%); }
+    }
+
+    /* ---------- Button ---------- */
+    .btn {
+      font: inherit;
+      font-size: clamp(1.25rem, 5.5vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      padding: 1.1em 1.7em;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff86a5, #ff5a85);
+      box-shadow: 0 8px 0 #d9446f, 0 16px 30px rgba(217, 68, 111, 0.35);
+      cursor: pointer;
+      touch-action: manipulation;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .btn:active { filter: brightness(0.95); }
+    .btn:disabled { cursor: default; color: #fff; }
+
+    .btn.panic { animation: panic 0.65s ease-in-out; }
+    .btn.pop   { animation: pop 0.35s ease-in forwards; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.06); }
+    }
+
+    @keyframes panic {
+      0%   { transform: none; }
+      10%  { transform: translate(-7px, 0) rotate(-7deg); }
+      20%  { transform: translate(7px, -3px) rotate(7deg); }
+      30%  { transform: translate(-7px, 2px) rotate(-6deg); }
+      40%  { transform: translate(7px, -2px) rotate(6deg); }
+      50%  { transform: translate(-6px, 0) rotate(-5deg); }
+      60%  { transform: translate(6px, 2px) rotate(5deg); }
+      70%  { transform: translate(-4px, 0) rotate(-3deg); }
+      80%  { transform: translate(4px, -1px) rotate(3deg); }
+      90%  { transform: translate(-2px, 0) rotate(-1deg); }
+      100% { transform: none; }
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(1); opacity: 1; }
+      40%  { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    /* ---------- Stage ---------- */
+    .stage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.4rem;
+    }
+
+    .stage.show { display: flex; }
+
+    /* ---------- Undertale-style dialogue box ---------- */
+    .box {
+      position: relative;
+      display: grid;
+      width: min(92vw, 440px);
+      padding: 0.8rem 1rem 0.9rem;
+      background: #000;
+      border: 5px solid #fff;
+      box-shadow: 0 0 0 3px #000, 0 12px 28px rgba(90, 20, 40, 0.35);
+      color: #fff;
+      font-family: "VT323", "Courier New", monospace;
+      font-size: clamp(1.35rem, 6vw, 1.65rem);
+      line-height: 1.15;
+      text-align: left;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .box > .main,
+    .box > .joke { grid-area: 1 / 1; }
+
+    .box .joke { align-self: center; visibility: hidden; }
+    .box.joking .main { visibility: hidden; }
+    .box.joking .joke { visibility: visible; }
+
+    .line {
+      position: relative;
+      display: flex;
+      gap: 0.5ch;
+    }
+
+    .line + .line { margin-top: 0.55rem; }
+
+    .line .star { flex: none; }
+    .line .txt  { position: relative; flex: 1; }
+    .line .ghost { visibility: hidden; }
+
+    .line .typed {
+      position: absolute;
+      inset: 0;
+    }
+
+    .line.ps {
+      font-size: 0.82em;
+      color: #c8c8c8;
+    }
+
+    .line.ps .star { visibility: hidden; }
+    .line.ps.on .star { visibility: visible; }
+
+    /* ---------- Cat (pixel art) ---------- */
+    .cat-wrap {
+      position: relative;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .cat-wrap::after {
+      content: "";
+      position: absolute;
+      left: 14%;
+      right: 18%;
+      bottom: -4%;
+      height: 5%;
+      background: rgba(140, 50, 75, 0.2);
+      z-index: -1;
+    }
+
+    .cat {
+      position: relative;
+      width: clamp(150px, 46vmin, 220px);
+    }
+
+    .stage.show .cat { animation: appear 0.4s steps(1) both; }
+    .cat.hit { animation: hit 0.45s linear both; }
+
+    .pix {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+      transform-origin: 50% 100%;
+      animation: idle 1s steps(1) infinite;
+    }
+
+    .tail-a { animation: tailA 1s steps(1) infinite; }
+    .tail-b { animation: tailB 1s steps(1) infinite; }
+    .lids   { opacity: 0; animation: lids 4.5s steps(1) infinite; }
+
+    @keyframes appear {
+      0%   { opacity: 0; }
+      20%  { opacity: 1; }
+      40%  { opacity: 0; }
+      60%  { opacity: 1; }
+      80%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes idle {
+      0%  { transform: none; }
+      50% { transform: translateY(3%) scale(1.03, 0.96); }
+    }
+
+    @keyframes hit {
+      0%   { transform: translateX(0); }
+      10%  { transform: translateX(-9%); }
+      20%  { transform: translateX(8%); }
+      30%  { transform: translateX(-7%); }
+      40%  { transform: translateX(6%); }
+      50%  { transform: translateX(-4%); }
+      60%  { transform: translateX(3%); }
+      70%  { transform: translateX(-2%); }
+      80%  { transform: translateX(1%); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes tailA {
+      0%  { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes tailB {
+      0%  { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes lids {
+      0%  { opacity: 0; }
+      93% { opacity: 1; }
+      97% { opacity: 0; }
+    }
+
+    /* ---------- Encounter flash ---------- */
+    .encounter {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      place-items: center;
+      background: #000;
+    }
+
+    .encounter.on { display: grid; }
+
+    .encounter .soul {
+      width: 34px;
+      image-rendering: pixelated;
+      animation: soul 0.7s steps(1) both;
+    }
+
+    @keyframes soul {
+      0%   { opacity: 1; }
+      16%  { opacity: 0; }
+      33%  { opacity: 1; }
+      50%  { opacity: 0; }
+      66%  { opacity: 1; }
+      100% { opacity: 1; }
+    }
+
+    /* ---------- Hearts ---------- */
+    .fx {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .heart {
+      position: absolute;
+      line-height: 1;
+      animation: floatUp var(--d) ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translate(-50%, -50%) scale(0.4) rotate(0); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--dx)), calc(-50% - var(--dy))) scale(1.1) rotate(var(--r)); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lily, .tail-a, .tail-b, .lids, .pix, .btn { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="lilies" aria-hidden="true">
+    <div class="lily tl"></div>
+    <div class="lily tr"></div>
+    <div class="lily bl"></div>
+    <div class="lily br"></div>
+  </div>
+
+  <main>
+    <button class="btn" id="btn" type="button">Nicht drücken!</button>
+
+    <div class="stage" id="stage">
+      <div class="cat-wrap" id="catWrap" role="button" aria-label="Katze">
+        <div class="cat" id="cat"></div>
+      </div>
+
+      <div class="box" id="box">
+        <div class="main">
+          <p class="line msg"><span class="star">*</span><span class="txt" data-text="Viel Glück bei der Präsi, Schatz. Du bist eine Macherin und schaffst es easy peasy. Ich glaub an dich&nbsp;💪&#8288;😁"></span></p>
+          <p class="line ps"><span class="star">*</span><span class="txt" data-text="P.S: Bitte schlag mich nicht oder kotz mich nicht an, nur weil es kitschig&nbsp;ist&nbsp;😂"></span></p>
+        </div>
+        <p class="line joke"><span class="star">*</span><span class="txt" data-text="Wie oft willst du mich noch tappen? Miau und so"></span></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="encounter" id="encounter" aria-hidden="true"></div>
+
+  <div class="fx" id="fx" aria-hidden="true"></div>
+
+  <script>
+    (function () {
+      var REDS = ["#e3242b", "#ef2f3a", "#d81b2c", "#ff3b3f", "#c9142a"];
+
+      document.querySelectorAll(".lily").forEach(function (lily) {
+        var florets = [];
+        for (var i = 0; i < 90; i++) {
+          florets.push({
+            angle: Math.random() * 360,
+            length: 22 + Math.sqrt(Math.random()) * 26,
+            color: REDS[Math.floor(Math.random() * REDS.length)]
+          });
+        }
+        // Longest first so the shorter (front-facing) florets are drawn on top
+        florets.sort(function (a, b) { return b.length - a.length; });
+
+        var frag = document.createDocumentFragment();
+        florets.forEach(function (f) {
+          var el = document.createElement("i");
+          el.className = "floret";
+          el.style.width = f.length + "%";
+          el.style.setProperty("--a", f.angle + "deg");
+          el.style.setProperty("--c", f.color);
+          frag.appendChild(el);
+        });
+        lily.appendChild(frag);
+      });
+
+      var PALETTE = {
+        K: "#141118", F: "#2b2633", H: "#433b4f", P: "#f79ab2",
+        G: "#b8e04a", B: "#0b0a0e", W: "#ffffff", N: "#ff8fab",
+        C: "#ff8fb1", M: "#e07a98"
+      };
+
+      var CAT = [
+        "..KK..........KK..",
+        "..KFK........KFK..",
+        "..KPFK......KFPK..",
+        "..KPPFKKKKKKFPPK..",
+        ".KFFFFFFFFFFFFFFK.",
+        ".KFGGGFFFFFFGGGFK.",
+        "KFFGBWFFFFFFGBWFFK",
+        "KFFGBBFFFFFFGBBFFK",
+        "KFFGGGFFFFFFGGGFFK",
+        "KFCCFFFFNNFFFFCCFK",
+        "KFFFFFMFMMFMFFFFFK",
+        "KFFFFFFMFFMFFFFFFK",
+        ".KFFFFFFFFFFFFFFK.",
+        "..KFFFFFFFFFFFFK..",
+        "..KFFFFFHHFFFFFK..",
+        ".KFFFFFFHHFFFFFFK.",
+        ".KFFFFFFFFFFFFFFK.",
+        ".KFFFFFFFFFFFFFFK.",
+        ".KFFFHHHFFHHHFFFK.",
+        "..KKKKKKKKKKKKKK.."
+      ];
+
+      var LIDS = [
+        null, null, null, null, null,
+        ".KFFFFFFFFFFFFFFK.",
+        "KFFFFFFFFFFFFFFFFK",
+        "KFFFFFFFFFFFFFFFFK",
+        "KFFKKKFFFFFFKKKFFK"
+      ];
+
+      var TAIL_A = [
+        null, null, null, null, null, null, null, null, null,
+        "...KK.",
+        "..KFFK",
+        "..KFK.",
+        ".KFK..",
+        ".KFK..",
+        ".KFK..",
+        ".KFK..",
+        "KFK...",
+        "FK....",
+        "FK...."
+      ];
+
+      var TAIL_B = [
+        null, null, null, null, null, null, null, null, null, null,
+        "....KK",
+        "...KFK",
+        "...KFK",
+        "..KFK.",
+        "..KFK.",
+        ".KFK..",
+        ".KFK..",
+        "KFK...",
+        "FK...."
+      ];
+
+      function pixels(rows, offsetX, cls) {
+        var out = '<g class="' + (cls || "") + '">';
+        rows.forEach(function (row, y) {
+          if (!row) return;
+          for (var x = 0; x < row.length; x++) {
+            var col = PALETTE[row[x]];
+            if (col) out += '<rect x="' + (x + offsetX) + '" y="' + y + '" width="1.02" height="1.02" fill="' + col + '"/>';
+          }
+        });
+        return out + "</g>";
+      }
+
+      document.getElementById("cat").innerHTML =
+        '<svg class="pix" viewBox="0 0 23 20" shape-rendering="crispEdges" aria-hidden="true">' +
+        pixels(TAIL_A, 17, "tail-a") +
+        pixels(TAIL_B, 17, "tail-b") +
+        pixels(CAT, 0) +
+        pixels(LIDS, 0, "lids") +
+        "</svg>";
+
+      var SOUL = [
+        ".RR.RR.",
+        "RRRRRRR",
+        "RRRRRRR",
+        ".RRRRR.",
+        "..RRR..",
+        "...R..."
+      ];
+      PALETTE.R = "#ff0000";
+      document.getElementById("encounter").innerHTML =
+        '<svg class="soul" viewBox="0 0 7 6" shape-rendering="crispEdges">' + pixels(SOUL, 0) + "</svg>";
+
+      var btn = document.getElementById("btn");
+      var stage = document.getElementById("stage");
+      var box = document.getElementById("box");
+      var catWrap = document.getElementById("catWrap");
+      var cat = document.getElementById("cat");
+      var fx = document.getElementById("fx");
+      var encounter = document.getElementById("encounter");
+
+      var HEARTS = ["💖", "💕", "❤️", "💗", "💞"];
+
+      function spawnHearts(x, y, count) {
+        for (var i = 0; i < count; i++) {
+          var h = document.createElement("span");
+          h.className = "heart";
+          h.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+          h.style.left = x + "px";
+          h.style.top = y + "px";
+          h.style.fontSize = (18 + Math.random() * 18) + "px";
+          h.style.setProperty("--dx", (Math.random() * 180 - 90) + "px");
+          h.style.setProperty("--dy", (120 + Math.random() * 160) + "px");
+          h.style.setProperty("--r", (Math.random() * 60 - 30) + "deg");
+          h.style.setProperty("--d", (1.1 + Math.random() * 0.9) + "s");
+          h.addEventListener("animationend", function () { this.remove(); });
+          fx.appendChild(h);
+        }
+      }
+
+      function centerOf(el) {
+        var r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      function restartClass(el, cls) {
+        el.classList.remove(cls);
+        void el.offsetWidth;
+        el.classList.add(cls);
+      }
+
+      // Each .txt gets an invisible full copy (reserves the box size) and a typed overlay
+      box.querySelectorAll(".txt").forEach(function (t) {
+        t.innerHTML = '<span class="ghost"></span><span class="typed"></span>';
+        t.querySelector(".ghost").textContent = t.dataset.text;
+      });
+
+      var typingJob = 0;
+
+      function typeLine(line, done) {
+        var job = typingJob;
+        var typed = line.querySelector(".typed");
+        var chars = Array.from(line.querySelector(".txt").dataset.text);
+        var i = 0;
+        typed.textContent = "";
+        line.classList.add("on");
+
+        (function next() {
+          if (job !== typingJob) return;
+          if (i >= chars.length) { if (done) done(); return; }
+          var ch = chars[i++];
+          typed.textContent += ch;
+          var delay = 38;
+          if (ch === "," ) delay = 180;
+          if (ch === "." || ch === "?" || ch === "!" || ch === ":") delay = 320;
+          setTimeout(next, delay);
+        })();
+      }
+
+      function finishLine(line) {
+        line.querySelector(".typed").textContent = line.querySelector(".txt").dataset.text;
+        line.classList.add("on");
+      }
+
+      var mainLines = box.querySelectorAll(".main .line");
+      var jokeLine = box.querySelector(".joke");
+
+      function typeMain() {
+        typingJob++;
+        mainLines.forEach(function (l) { l.querySelector(".typed").textContent = ""; l.classList.remove("on"); });
+        typeLine(mainLines[0], function () {
+          setTimeout(function () { typeLine(mainLines[1]); }, 700);
+        });
+      }
+
+      function isTypingMain() {
+        return mainLines[1].querySelector(".typed").textContent.length < mainLines[1].querySelector(".txt").dataset.text.length;
+      }
+
+      btn.addEventListener("click", function () {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        btn.textContent = "Neiiin! 😱";
+        btn.classList.add("panic");
+
+        setTimeout(function () {
+          btn.classList.add("pop");
+        }, 650);
+
+        setTimeout(function () {
+          btn.style.display = "none";
+          encounter.classList.add("on");
+        }, 1000);
+
+        setTimeout(function () {
+          encounter.classList.remove("on");
+          stage.classList.add("show");
+          setTimeout(typeMain, 500);
+        }, 1800);
+      });
+
+      // Tapping the box while text is typing skips to the full text, like pressing Z
+      box.addEventListener("click", function () {
+        if (box.classList.contains("joking")) return;
+        if (isTypingMain()) {
+          typingJob++;
+          mainLines.forEach(finishLine);
+        }
+      });
+
+      var taps = 0;
+      var jokeTimer = null;
+
+      catWrap.addEventListener("click", function (e) {
+        taps++;
+        restartClass(cat, "hit");
+        spawnHearts(e.clientX, e.clientY, 7);
+
+        if (taps % 5 === 0) {
+          clearTimeout(jokeTimer);
+          typingJob++;
+          box.classList.add("joking");
+          typeLine(jokeLine, function () {
+            jokeTimer = setTimeout(function () {
+              box.classList.remove("joking");
+              typingJob++;
+              mainLines.forEach(finishLine);
+            }, 3000);
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
